@@ -4,6 +4,7 @@ import type { Settings } from '@/lib/types';
 import { DEFAULT_SETTINGS } from '@/lib/types';
 import { loadSettings, saveSettings, exportJSON, clearAll } from '@/lib/storage';
 import { downloadIcs } from '../components/FirstRun';
+import ClockTimePicker from '../components/ClockTimePicker';
 
 export default function SettingsPage() {
   const [s, setS] = useState<Settings>(DEFAULT_SETTINGS);
@@ -31,9 +32,9 @@ export default function SettingsPage() {
     <main>
       <h1>ตั้งค่า</h1>
       <div className="card">
-        <label>เวลาพักใจ (ทุกวัน)</label>
-        <input type="time" value={s.windowStart}
-          onChange={(e) => setS({ ...s, windowStart: e.target.value })} />
+        <label style={{ display: 'block', marginBottom: 8 }}>เวลาพักใจ (ทุกวัน)</label>
+        <ClockTimePicker value={s.windowStart}
+          onChange={(v) => setS({ ...s, windowStart: v })} />
         <label style={{ marginTop: 12, display: 'block' }}>นานกี่นาที</label>
         <input type="number" min={5} max={120} value={s.windowMinutes}
           onChange={(e) => setS({ ...s, windowMinutes: Number(e.target.value) })} />

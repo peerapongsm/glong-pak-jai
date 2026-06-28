@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { Settings } from '@/lib/types';
 import { DEFAULT_SETTINGS } from '@/lib/types';
 import { buildIcs } from '@/lib/ics';
+import ClockTimePicker from './ClockTimePicker';
 
 export function downloadIcs(settings: Settings): void {
   const blob = new Blob([buildIcs(settings, new Date())], { type: 'text/calendar' });
@@ -33,8 +34,8 @@ export default function FirstRun({ onDone }: { onDone: (s: Settings) => void }) 
         </p>
       </div>
       <div className="card">
-        <label>เวลาพักใจ (ทุกวัน)</label>
-        <input type="time" value={start} onChange={(e) => setStart(e.target.value)} />
+        <label style={{ display: 'block', marginBottom: 8 }}>เวลาพักใจ (ทุกวัน)</label>
+        <ClockTimePicker value={start} onChange={setStart} />
         <label style={{ marginTop: 12, display: 'block' }}>นานกี่นาที</label>
         <input type="number" min={5} max={120} value={mins}
           onChange={(e) => setMins(Number(e.target.value))} />
