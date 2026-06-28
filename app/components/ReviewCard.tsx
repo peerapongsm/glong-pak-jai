@@ -33,7 +33,7 @@ export default function ReviewCard({
         <div style={{ display: 'grid', gap: 8 }}>
           <input placeholder="จะทำอะไร (สั้นๆ)" value={note}
             onChange={(e) => setNote(e.target.value)} />
-          <button className="full" onClick={() => onResolve('action', note)}>บันทึก action</button>
+          <button className="full" disabled={!note.trim()} onClick={() => onResolve('action', note)}>บันทึก</button>
           <button className="full secondary" onClick={() => setActionMode(false)}>ยกเลิก</button>
         </div>
       )}

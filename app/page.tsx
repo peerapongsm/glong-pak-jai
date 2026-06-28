@@ -20,6 +20,7 @@ export default function Home() {
   const [ready, setReady] = useState(false);
   const [now, setNow] = useState<Date>(new Date());
   const [draft, setDraft] = useState('');
+  const [carried, setCarried] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setWorries(loadWorries());
@@ -38,6 +39,7 @@ export default function Home() {
   }
 
   const pending = pendingWorries(worries);
+  const visible = pending.filter((w) => !carried.has(w.id));
   const ws = windowState(settings, now);
   const s = stats(worries);
 
@@ -49,7 +51,8 @@ export default function Home() {
   };
   const resolve = (id: string, d: Disposition, note?: string) =>
     persist(worries.map((w) => (w.id === id ? resolveWorry(w, d, { actionNote: note }) : w)));
-  const carry = (_id: string) => { /* no-op: stays pending until a future window */ };
+  const carry = (id: string) =>
+    setCarried((prev) => { const n = new Set(prev); n.add(id); return n; });
 
   return (
     <main>
@@ -79,10 +82,10 @@ export default function Home() {
             <strong>ถึงเวลาพักใจแล้ว</strong>
             <span className="muted"> (เหลือ {fmtCountdown(ws.msRemaining)})</span>
           </div>
-          {pending.length === 0 ? (
+          {visible.length === 0 ? (
             <div className="card"><p>ไม่มีเรื่องค้างในกล่อง สบายใจได้ 🌿</p></div>
           ) : (
-            pending.map((w) => (
+            visible.map((w) => (
               <ReviewCard key={w.id} worry={w}
                 onResolve={(d, note) => resolve(w.id, d, note)}
                 onCarry={() => carry(w.id)} />
