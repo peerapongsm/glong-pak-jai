@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { Worry, Settings, Disposition } from '@/lib/types';
 import { DEFAULT_SETTINGS } from '@/lib/types';
 import { createWorry, resolveWorry, pendingWorries, stats } from '@/lib/worry';
@@ -15,6 +16,7 @@ function fmtCountdown(ms: number): string {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [worries, setWorries] = useState<Worry[]>([]);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [ready, setReady] = useState(false);
@@ -57,6 +59,7 @@ export default function Home() {
   return (
     <main>
       <h1>กล่องพักใจ</h1>
+      <button className="secondary" onClick={() => router.push('/settings')}>ตั้งค่า</button>
       {s.didntHappenPct !== null && (
         <div className="card">
           <strong style={{ fontSize: 22 }}>{s.didntHappenPct}%</strong>
