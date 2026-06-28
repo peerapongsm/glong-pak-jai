@@ -1,4 +1,6 @@
+import './globals.css';
 import type { ReactNode } from 'react';
+import CrisisCard from './components/CrisisCard';
 
 export const metadata = {
   title: 'กล่องพักใจ',
@@ -8,7 +10,10 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="th">
-      <body>{children}</body>
+      <body>
+        {children}
+        <CrisisCard />
+      </body>
     </html>
   );
 }
