@@ -9,6 +9,14 @@ import { loadWorries, saveWorries, loadSettings, saveSettings } from '@/lib/stor
 import FirstRun from './components/FirstRun';
 import ReviewCard from './components/ReviewCard';
 
+function previewText(text: string, max = 48): string {
+  if (text.length <= max) return text;
+  const slice = text.slice(0, max);
+  const lastSpace = slice.lastIndexOf(' ');
+  const cut = lastSpace > max * 0.5 ? slice.slice(0, lastSpace) : slice;
+  return `${cut.trimEnd()}…`;
+}
+
 function fmtCountdown(ms: number): string {
   const totalMin = Math.ceil(ms / 60000);
   const h = Math.floor(totalMin / 60), m = totalMin % 60;
@@ -23,6 +31,7 @@ export default function Home() {
   const [now, setNow] = useState<Date>(new Date());
   const [draft, setDraft] = useState('');
   const [carried, setCarried] = useState<Set<string>>(new Set());
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     setWorries(loadWorries());
@@ -44,6 +53,7 @@ export default function Home() {
   const visible = pending.filter((w) => !carried.has(w.id));
   const ws = windowState(settings, now);
   const s = stats(worries);
+  const selected = visible.find((w) => w.id === selectedId) ?? visible[0] ?? null;
 
   const addWorry = () => {
     const w = createWorry(draft);
@@ -57,7 +67,7 @@ export default function Home() {
     setCarried((prev) => { const n = new Set(prev); n.add(id); return n; });
 
   return (
-    <main>
+    <main className="home">
       <h1>กล่องพักใจ</h1>
       <button className="secondary" onClick={() => router.push('/settings')}>ตั้งค่า</button>
       {s.didntHappenPct !== null && (
@@ -88,11 +98,36 @@ export default function Home() {
           {visible.length === 0 ? (
             <div className="card"><p>ไม่มีเรื่องค้างในกล่อง สบายใจได้ 🌿</p></div>
           ) : (
-            visible.map((w) => (
-              <ReviewCard key={w.id} worry={w}
-                onResolve={(d, note) => resolve(w.id, d, note)}
-                onCarry={() => carry(w.id)} />
-            ))
+            <>
+              <div className="review-mobile">
+                {visible.map((w) => (
+                  <ReviewCard key={w.id} worry={w}
+                    onResolve={(d, note) => resolve(w.id, d, note)}
+                    onCarry={() => carry(w.id)} />
+                ))}
+              </div>
+              <div className="review-desktop">
+                <div className="review-list card">
+                  {visible.map((w) => (
+                    <button
+                      key={w.id}
+                      type="button"
+                      className={`review-list-item${w.id === selected?.id ? ' selected' : ''}`}
+                      onClick={() => setSelectedId(w.id)}
+                    >
+                      {previewText(w.text)}
+                    </button>
+                  ))}
+                </div>
+                <div className="review-detail">
+                  {selected && (
+                    <ReviewCard key={selected.id} worry={selected}
+                      onResolve={(d, note) => resolve(selected.id, d, note)}
+                      onCarry={() => carry(selected.id)} />
+                  )}
+                </div>
+              </div>
+            </>
           )}
         </>
       )}

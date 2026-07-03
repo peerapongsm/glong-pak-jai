@@ -6,7 +6,7 @@ import RegisterSW from './components/RegisterSW';
 export const metadata = {
   title: 'กล่องพักใจ',
   description: 'พักความกังวลไว้ก่อน ค่อยมาคิดทีหลัง',
-  manifest: '/glong-pak-jai/manifest.webmanifest',
+  manifest: '/manifest.webmanifest',
 };
 export const viewport = { themeColor: '#5B9BB5' };
 

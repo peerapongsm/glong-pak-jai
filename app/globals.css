@@ -1,6 +1,7 @@
 :root {
   --bg: #F1F6FA; --panel: #FFFFFF; --primary: #5B9BB5; --primary-dark: #4F8AA3;
   --accent: #7FB5A6; --text: #2E3D44; --muted: #7A8C93; --crisis: #C25444;
+  --card-border: #D7E3EA;
   --radius: 16px;
 }
 * { box-sizing: border-box; }
@@ -11,6 +12,8 @@ body {
   line-height: 1.6;
 }
 main { max-width: 520px; margin: 0 auto; padding: 20px 16px 96px; }
+h1, h2 { text-wrap: balance; }
+p { text-wrap: pretty; }
 button {
   font: inherit; cursor: pointer; border: none; border-radius: var(--radius);
   padding: 14px 18px; background: var(--primary); color: #fff; font-weight: 600;
@@ -18,9 +21,53 @@ button {
 button:active { background: var(--primary-dark); }
 button.secondary { background: var(--panel); color: var(--primary-dark); border: 1px solid #d7e3ea; }
 button.full { display: block; width: 100%; }
-.card { background: var(--panel); border-radius: var(--radius); padding: 18px; margin: 12px 0; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 1px 3px rgba(46, 61, 68, 0.07), 0 1px 2px rgba(46, 61, 68, 0.05);
+  border-radius: var(--radius); padding: 18px; margin: 12px 0;
+}
 .muted { color: var(--muted); }
 textarea, input {
   font: inherit; width: 100%; border: 1px solid #d7e3ea; border-radius: 12px;
   padding: 12px; background: #fff; color: var(--text);
+}
+
+/* Review screen: mobile shows a stacked list (default, unchanged);
+   desktop switches to a list + detail split. Both render in markup,
+   CSS toggles which is visible so no layout logic depends on JS resize. */
+.review-desktop { display: none; }
+.review-list-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  font-weight: 400;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  margin-bottom: 4px;
+}
+.review-list-item:active { background: var(--bg); }
+.review-list-item.selected {
+  background: var(--bg); border-color: var(--primary); color: var(--text); font-weight: 600;
+}
+.review-list { padding: 8px; max-height: 70vh; overflow-y: auto; }
+.review-detail { min-width: 0; }
+
+@media (min-width: 1024px) {
+  main { max-width: 640px; padding: 56px 32px 120px; }
+  main.home { max-width: 960px; }
+  .card { padding: 24px; margin: 16px 0; }
+  h1 { font-size: 2rem; }
+
+  .review-mobile { display: none; }
+  .review-desktop {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .review-list-item:hover { background: var(--bg); }
 }
