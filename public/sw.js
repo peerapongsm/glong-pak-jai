@@ -1,7 +1,7 @@
 // HTML = network-first (fresh HTML => current chunk hashes after a redeploy).
 // Other GETs = cache-first. Bump CACHE to invalidate.
-const CACHE = 'gpj-v2';
-const SHELL = '/glong-pak-jai/';
+const CACHE = 'gpj-v2x';
+const SHELL = '/';
 self.addEventListener('install', (e) => {
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll([SHELL])));
